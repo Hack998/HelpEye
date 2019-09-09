@@ -28,13 +28,24 @@ class Lexer():
         # Import
         self.lexer.add('IMPORT',r'IMPORT')
         # Call
-        self.lexer.add('CALL',r'call')
+        self.lexer.add('CALL',r'Call')
         # Inclination
         self.lexer.add('INCLI',r'Inclination')
         # Increase
         self.lexer.add('INC',r'Inc')
         # Decrease
         self.lexer.add('DEC',r'Dec')
+        # Comment
+        self.lexer.add('COMMENT', r'//')
+        # Procedure
+        self.lexer.add('PROCEDURE', r'Procedure')
+        # Begin
+        self.lexer.add('BEGIN', r'begin')
+        # End
+        self.lexer.add('END', r'end')
+        # Text
+        self.lexer.add('TEXT', '[a-zA-Z0-9/]*')
+        
         
     def get_lexer(self):
         self._add_tokens()
