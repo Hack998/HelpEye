@@ -18,6 +18,8 @@ class Lexer():
         self.lexer.add('CLOSE_PAREN',r'\)')
         # Comma
         self.lexer.add('COMMA', r'\,')
+         # Comma
+        self.lexer.add('POINT', r'\.')
         # Semi Colon
         self.lexer.add('SEMI_COLON',r'\;')
         # Number
@@ -43,6 +45,8 @@ class Lexer():
         self.lexer.add('BEGIN', r'begin')
         # End
         self.lexer.add('END', r'end')
+        # Main
+        self.lexer.add('MAIN', r'Main')
         # Text
         self.lexer.add('TEXT', '[a-zA-Z0-9/]*')
         

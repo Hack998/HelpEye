@@ -1,0 +1,17 @@
+// hola
+
+Procedure df()
+begin
+
+Inclination(6);
+
+end;
+
+
+Procedure resta ( )
+begin
+
+Dec (4,1);
+Call df;
+
+end;

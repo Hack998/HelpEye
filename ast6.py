@@ -34,8 +34,8 @@ class Inclination():
     
     def eval(self):
         if int(self.value) >= 15:
-            return print("Peligro")
-        return print("Safe")
+            return "Peligro"
+        return "Safe"
 
 class Call():
     def __init__(self, name, value=None):
@@ -78,7 +78,7 @@ class Import():
         self.rute = rute
         
     def eval(self):
-        return print(self.rute)
+        return 
         
 class Procedure():
     def __init__(self, name, value=None):
