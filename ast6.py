@@ -28,6 +28,12 @@ class Dec(BinaryOp):
     def eval(self):
         return self.left.eval() - self.right.eval()
     
+#Declare Variable Class
+class Variable():
+    def __init__(self, name, value=None):
+        self.name = name 
+        self.value = value 
+    
 class Inclination():
     def __init__(self, value):
         self.value = value

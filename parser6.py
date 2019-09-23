@@ -7,7 +7,7 @@ Created on Sat Aug 31 14:26:52 2019
 """
 
 from rply import ParserGenerator
-from ast6 import Number, Inc, Dec, Inclination, Call, Procedure
+from ast6 import Number, Inc, Dec, Inclination, Call, Procedure, Variable
 from parser1 import Parserr
 from lexer6 import Lexer
 
@@ -16,14 +16,15 @@ class Parser():
     def __init__(self):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
-            ['NUMBER', 'INC', 'DEC', 'OPEN_PAREN', 'CLOSE_PAREN',
-             'SEMI_COLON', 'COMMA', 'COMMENT', 'TEXT', 'INCLI', 
-             'IMPORT', 'CALL', 'PROCEDURE', 'BEGIN', 'END', 'MAIN', 'POINT']
+            ['DECLARE', 'EQUAL', 'NUMBER', 'INC', 'DEC', 'OPEN_PAREN', 'CLOSE_PAREN',
+             'SEMI_COLON', 'COMMA', 'POINT', 'COMMENT', 'TEXT', 'INCLI', 
+             'IMPORT', 'CALL', 'MAIN', 'PROCEDURE', 'BEGIN', 'END']
         )
         self.comment = ""
         self.procedures = []
         self.token = 0
         self.arguments = []
+        self.declarations = []
 
     def parse(self):
         @self.pg.production('x : ')
@@ -35,6 +36,35 @@ class Parser():
         @self.pg.production('program : ')
         def programE(p):
             return 
+        
+        # Declare
+        @self.pg.production('y : DECLARE TEXT EQUAL NUMBER SEMI_COLON')
+        def declare(p):
+            self.declarations.append(Variable(p[1].value, p[3].value))
+            print("1")
+            return
+        
+        @self.pg.production('y : DECLARE TEXT SEMI_COLON')
+        def emptyDeclare(p):
+            self.declarations.append(Variable(p[1].value))
+            print("2")
+            return
+        
+        @self.pg.production('y : TEXT EQUAL NUMBER SEMI_COLON')
+        def reDeclare(p):
+            dCopy = self.declarations
+            for i in dCopy:
+                if(i.name == p[0].value):    
+                    self.declarations.remove(i)
+                    self.declarations.append(Variable(p[0].value, p[2].value))
+                    
+                    for j in self.declarations:
+                        print("Name = " + j.name + "\nValue = " + j.value)
+                        
+                    return True
+                else:
+                    print("4")
+                    return False
         
         # Incremento
         @self.pg.production('y : INC OPEN_PAREN NUMBER COMMA NUMBER CLOSE_PAREN SEMI_COLON')

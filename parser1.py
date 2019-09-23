@@ -14,7 +14,7 @@ class Parserr():
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
             ['NUMBER', 'INC', 'DEC', 'OPEN_PAREN', 'CLOSE_PAREN',
-             'SEMI_COLON', 'COMMA', 'COMMENT', 'TEXT', 'INCLI',
+             'SEMI_COLON', 'COMMA', 'POINT','COMMENT', 'TEXT', 'INCLI',
              'CALL', 'PROCEDURE', 'BEGIN', 'END']
         )
         self.comment = ""

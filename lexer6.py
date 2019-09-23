@@ -22,6 +22,10 @@ class Lexer():
         self.lexer.add('POINT', r'\.')
         # Semi Colon
         self.lexer.add('SEMI_COLON',r'\;')
+        #Equal simbol
+        self.lexer.add('EQUAL', r'\=')
+        #Declare
+        self.lexer.add('DECLARE', r'DECLARE')
         # Number
         self.lexer.add('NUMBER', r'\d+')
         # Ignore spaces
