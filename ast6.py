@@ -43,6 +43,33 @@ class Inclination():
             return "Peligro"
         return "Safe"
 
+class Brightness():
+    def __init__(self, value):
+        self.value = value
+    def eval(self):
+        if int(self.value) >= 15:
+            return print("Very bright")
+        elif int(self.value) <= 0:
+            return print("Very dark")
+        else:
+            return print("Safe")
+
+class Move():
+    def __init__(self, value):
+        self.value = value
+    def eval(self):
+        if int(self.value) >= 15:
+            return print("Peligro")
+        return print("Safe")
+
+class Vibration():
+    def __init__(self, value):
+        self.value = value
+    def eval(self):
+        if int(self.value) >= 15:
+            return print("Peligro")
+        return print("Safe")
+
 class Call():
     def __init__(self, name, value=None):
         self.name = name
@@ -78,6 +105,37 @@ class Call():
                             print(x.eval())
                     return 
         print("El procedimiento llamado no existe")
+
+class For():
+    def __init__(self, value, number):
+        self.value = value
+        self.number = number
+    def eval(self, procedures):
+        while(self.number > 0):
+            arr = procedures
+            i = -1
+            if len(procedures) == self.number:
+                for x in procedures:
+                    i += 1
+                    if len(self.value) == arr[i].len:
+                        arr1 = procedures[i]
+                        for x in arr1.array:
+                            try:
+                                x.eval(procedures)
+                            except:
+                                print(x.eval())
+                        return
+                self.number -= 1
+            else:
+                print("El procedimiento no puede ser ciclado")
+        else:
+            print("Ciclo terminado")
+
+class FEnd():
+    def __init__(self, value):
+        self.value = value
+    def eval(self):
+        return print("Ciclos cerrados: " + self.value)
     
 class Import():
     def __init__(self, rute):

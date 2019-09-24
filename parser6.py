@@ -7,7 +7,7 @@ Created on Sat Aug 31 14:26:52 2019
 """
 
 from rply import ParserGenerator
-from ast6 import Number, Inc, Dec, Inclination, Call, Procedure, Variable
+from ast6 import Number, Inc, Dec, Inclination, Call, Procedure, Variable, Import, Brightness, Vibration, Move, For, FEnd
 from parser1 import Parserr
 from lexer6 import Lexer
 
@@ -25,6 +25,7 @@ class Parser():
         self.token = 0
         self.arguments = []
         self.declarations = []
+        self.cycle = []
 
     def parse(self):
         @self.pg.production('x : ')
@@ -89,6 +90,10 @@ class Parser():
                 left = Number(p[2].value)
                 right = Number(p[4].value)
                 return print((Inc(left, right)).eval())
+            elif self.token == 6:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.cycle[len(self.cycle) - 1]).array.append(Inc(left, right))
         
         # Decremento
         @self.pg.production('y : DEC OPEN_PAREN NUMBER COMMA NUMBER CLOSE_PAREN SEMI_COLON')
@@ -113,6 +118,10 @@ class Parser():
                 left = Number(p[2].value)
                 right = Number(p[4].value)
                 return print((Dec(left, right)).eval())
+            elif self.token == 6:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.cycle[len(self.cycle) - 1]).array.append(Dec(left, right))
         
         # Comentario
         @self.pg.production('y : COMMENT z')
@@ -151,7 +160,74 @@ class Parser():
                 return
             elif self.token == 5:
                 return (Inclination(p[2].value)).eval()
+            elif self.token == 6:
+                return (self.cycle[len(self.cycle) - 1]).array.append(Inclination(p[2].value))
             
+        #Iluminacion
+        @self.pg.production('y : BRIGHT OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
+        def BrightnessP(p):
+            if self.token == 0:
+                raise SystemExit("No se ha puesto un comentario al inicio")
+                return
+            elif self.token == 1:
+                raise SystemExit("No se han declarado variables")
+                return
+            elif self.token == 2:
+                raise SystemExit("Brightness() esta fuera de un procedimiento")
+                return
+            elif self.token == 3:
+                return (self.procedures[len(self.procedures) - 1]).array.append(Brightness(p[2].value))
+            elif self.token == 4:
+                raise SystemExit("Brightness() esta fuera de un procedimiento")
+                return
+            elif self.token == 5:
+                return (Inclination(p[2].value)).eval()
+            elif self.token == 6:
+                return (self.cycle[len(self.cycle) - 1]).array.append(Brightness(p[2].value))
+        
+        #Vibracion
+        @self.pg.production('y : VIB OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
+        def VibrationP(p):
+            if self.token == 0:
+                raise SystemExit("No se ha puesto un comentario al inicio")
+                return
+            elif self.token == 1:
+                raise SystemExit("No se han declarado variables")
+                return
+            elif self.token == 2:
+                raise SystemExit("Vibration() esta fuera de un procedimiento")
+                return
+            elif self.token == 3:
+                return (self.procedures[len(self.procedures) - 1]).array.append(Vibration(p[2].value))
+            elif self.token == 4:
+                raise SystemExit("Vibration() esta fuera de un procedimiento")
+                return
+            elif self.token == 5:
+                return (Inclination(p[2].value)).eval()
+            elif self.token == 6:
+                return (self.cycle[len(self.cycle) - 1]).array.append(Vibration(p[2].value))
+        
+        #Movimientos
+        @self.pg.production('y : MOV OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
+        def MoveP(p):
+            if self.token == 0:
+                raise SystemExit("No se ha puesto un comentario al inicio")
+                return
+            elif self.token == 1:
+                raise SystemExit("No se han declarado variables")
+                return
+            elif self.token == 2:
+                raise SystemExit("Move() esta fuera de un procedimiento")
+                return
+            elif self.token == 3:
+                return (self.procedures[len(self.procedures) - 1]).array.append(Move(p[2].value))
+            elif self.token == 4:
+                raise SystemExit("Move() esta fuera de un procedimiento")
+                return
+            elif self.token == 5:
+                return (Inclination(p[2].value)).eval()
+            elif self.token == 6:
+                return (self.cycle[len(self.cycle) - 1]).array.append(Move(p[2].value))
         
         # Import
         @self.pg.production('y : IMPORT TEXT POINT TEXT')
@@ -198,6 +274,8 @@ class Parser():
                 return
             elif self.token == 5:
                 return (Call(p[1].value)).eval(self.procedures)
+            elif self.token == 6:
+                return (self.cycle[len(self.cycle) - 1]).array.append(Call(p[1].value))
             
         
         @self.pg.production('y : CALL TEXT OPEN_PAREN args CLOSE_PAREN SEMI_COLON')
@@ -222,7 +300,45 @@ class Parser():
                 (Call(p[1].value, self.arguments)).eval(self.procedures)
                 self.arguments = []
                 return
+            elif self.token == 6:
+                (self.cycle[len(self.cycle) - 1]).array.append(Call(p[1].value, self.arguments))
+                self.arguments = []
+                return
              
+         #For
+        @self.pg.production('y: FOR NUMBER TEXT args FEND')
+        def ForP(p):
+            if self.token == 0:
+                raise SystemExit("No se ha puesto un comentario al inicio")
+                return
+            elif self.token == 1:
+                raise SystemExit("No se han declarado variables")
+                return
+            elif self.token == 2:
+                raise SystemExit("For() esta fuera de un procedimiento")
+                return
+            elif self.token == 3:
+                (self.procedures[len(self.procedures) - 1]).array.append(For(p[1].value))
+                self.token = 6
+                self.arguments = []
+                return
+            elif self.token == 4:
+                raise SystemExit("Call() esta fuera de un procedimiento")
+                return
+            elif self.token == 5:
+                self.token = 6
+                (For(p[1].value)).eval(self.cycle)
+                return
+            elif self.token == 6:
+                (self.cycle[len(self.cycle) - 1]).array.append(For(p[1].value))
+                return
+        
+        #FEnd
+        @self.pg.production('y: FEND SEMI_COLON')
+        def FEndP(p):
+            if self.token == 6:
+                self.token = 1
+            return       
         
         # Procedure Begin
         @self.pg.production('y : PROCEDURE TEXT OPEN_PAREN args CLOSE_PAREN BEGIN')
@@ -249,6 +365,10 @@ class Parser():
             elif self.token == 5:
                 raise SystemExit("No se puede crear un procedimiento dentro del Main")
                 return
+            elif self.token == 6:
+                self.cycle.append(Procedure(p[1].value))
+                self.arguments = []
+                return;
             
         
         @self.pg.production('y : PROCEDURE TEXT OPEN_PAREN CLOSE_PAREN BEGIN')
@@ -273,6 +393,9 @@ class Parser():
             elif self.token == 5:
                 raise SystemExit("No se puede crear un procedimiento dentro del Main")
                 return
+            elif self.token == 6:
+                self.cycle.append(Procedure(p[1].value))
+                return;
             
         
         # Main
