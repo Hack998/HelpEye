@@ -18,7 +18,7 @@ class Parser():
             # A list of all token names accepted by the parser.
             ['DECLARE', 'EQUAL', 'NUMBER', 'INC', 'DEC', 'OPEN_PAREN', 'CLOSE_PAREN',
              'SEMI_COLON', 'COMMA', 'POINT', 'COMMENT', 'TEXT', 'INCLI', 
-             'IMPORT', 'CALL', 'MAIN', 'PROCEDURE', 'BEGIN', 'END']
+             'IMPORT', 'CALL', 'TIMES', 'MAIN', 'PROCEDURE', 'BEGIN', 'END']
         )
         self.comment = ""
         self.procedures = []
@@ -93,7 +93,8 @@ class Parser():
             elif self.token == 6:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
-                return (self.cycle[len(self.cycle) - 1]).array.append(Inc(left, right))
+                self.cycle = []
+                return (self.cycle[0]).array.append(Inc(left, right))
         
         # Decremento
         @self.pg.production('y : DEC OPEN_PAREN NUMBER COMMA NUMBER CLOSE_PAREN SEMI_COLON')
@@ -121,7 +122,8 @@ class Parser():
             elif self.token == 6:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
-                return (self.cycle[len(self.cycle) - 1]).array.append(Dec(left, right))
+                self.cycle = []
+                return (self.cycle[0]).array.append(Dec(left, right))
         
         # Comentario
         @self.pg.production('y : COMMENT z')
@@ -161,7 +163,8 @@ class Parser():
             elif self.token == 5:
                 return (Inclination(p[2].value)).eval()
             elif self.token == 6:
-                return (self.cycle[len(self.cycle) - 1]).array.append(Inclination(p[2].value))
+                self.cycle = []
+                return (self.cycle[0]).array.append(Inclination(p[2].value))
             
         #Iluminacion
         @self.pg.production('y : BRIGHT OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
@@ -181,9 +184,10 @@ class Parser():
                 raise SystemExit("Brightness() esta fuera de un procedimiento")
                 return
             elif self.token == 5:
-                return (Inclination(p[2].value)).eval()
+                return (Brightness(p[2].value)).eval()
             elif self.token == 6:
-                return (self.cycle[len(self.cycle) - 1]).array.append(Brightness(p[2].value))
+                self.cycle = []
+                return (self.cycle[0]).array.append(Brightness(p[2].value))
         
         #Vibracion
         @self.pg.production('y : VIB OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
@@ -203,9 +207,10 @@ class Parser():
                 raise SystemExit("Vibration() esta fuera de un procedimiento")
                 return
             elif self.token == 5:
-                return (Inclination(p[2].value)).eval()
+                return (Vibration(p[2].value)).eval()
             elif self.token == 6:
-                return (self.cycle[len(self.cycle) - 1]).array.append(Vibration(p[2].value))
+                self.cycle = []
+                return (self.cycle[0]).array.append(Vibration(p[2].value))
         
         #Movimientos
         @self.pg.production('y : MOV OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
@@ -225,9 +230,10 @@ class Parser():
                 raise SystemExit("Move() esta fuera de un procedimiento")
                 return
             elif self.token == 5:
-                return (Inclination(p[2].value)).eval()
+                return (Move(p[2].value)).eval()
             elif self.token == 6:
-                return (self.cycle[len(self.cycle) - 1]).array.append(Move(p[2].value))
+                self.cycle = []
+                return (self.cycle[0]).array.append(Move(p[2].value))
         
         # Import
         @self.pg.production('y : IMPORT TEXT POINT TEXT')
@@ -275,7 +281,8 @@ class Parser():
             elif self.token == 5:
                 return (Call(p[1].value)).eval(self.procedures)
             elif self.token == 6:
-                return (self.cycle[len(self.cycle) - 1]).array.append(Call(p[1].value))
+                self.cycle = []
+                return (self.cycle[0]).array.append(Call(p[1].value))
             
         
         @self.pg.production('y : CALL TEXT OPEN_PAREN args CLOSE_PAREN SEMI_COLON')
@@ -301,12 +308,12 @@ class Parser():
                 self.arguments = []
                 return
             elif self.token == 6:
-                (self.cycle[len(self.cycle) - 1]).array.append(Call(p[1].value, self.arguments))
-                self.arguments = []
+                self.cycle = []
+                (self.cycle[0]).array.append(Call(p[1].value, self.arguments))
                 return
              
          #For
-        @self.pg.production('y: FOR NUMBER TEXT args FEND')
+        @self.pg.production('y : FOR NUMBER TIMES')
         def ForP(p):
             if self.token == 0:
                 raise SystemExit("No se ha puesto un comentario al inicio")
@@ -330,14 +337,15 @@ class Parser():
                 (For(p[1].value)).eval(self.cycle)
                 return
             elif self.token == 6:
-                (self.cycle[len(self.cycle) - 1]).array.append(For(p[1].value))
+                self.cycle = []
+                (self.cycle[0]).array.append(For(p[1].value))
                 return
         
         #FEnd
-        @self.pg.production('y: FEND SEMI_COLON')
+        @self.pg.production('y : FEND SEMI_COLON')
         def FEndP(p):
             if self.token == 6:
-                self.token = 1
+                self.token = 3
             return       
         
         # Procedure Begin
@@ -365,10 +373,6 @@ class Parser():
             elif self.token == 5:
                 raise SystemExit("No se puede crear un procedimiento dentro del Main")
                 return
-            elif self.token == 6:
-                self.cycle.append(Procedure(p[1].value))
-                self.arguments = []
-                return;
             
         
         @self.pg.production('y : PROCEDURE TEXT OPEN_PAREN CLOSE_PAREN BEGIN')
@@ -393,9 +397,6 @@ class Parser():
             elif self.token == 5:
                 raise SystemExit("No se puede crear un procedimiento dentro del Main")
                 return
-            elif self.token == 6:
-                self.cycle.append(Procedure(p[1].value))
-                return;
             
         
         # Main

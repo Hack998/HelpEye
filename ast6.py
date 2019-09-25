@@ -107,32 +107,24 @@ class Call():
         print("El procedimiento llamado no existe")
 
 class For():
-    def __init__(self, value, number):
+    def __init__(self, value):
         self.value = value
-        self.number = number
     def eval(self, procedures):
-        while(self.number > 0):
-            arr = procedures
-            i = -1
-            if len(procedures) == self.number:
-                for x in procedures:
-                    i += 1
-                    if len(self.value) == arr[i].len:
-                        arr1 = procedures[i]
-                        for x in arr1.array:
-                            try:
-                                x.eval(procedures)
-                            except:
-                                print(x.eval())
-                        return
-                self.number -= 1
+        while(self.value > 0):
+            for x in procedures:
+                try:
+                    x.eval(procedures)
+                except:
+                    print(x.eval())
+                    return
             else:
                 print("El procedimiento no puede ser ciclado")
+            self.value -= 1
         else:
             print("Ciclo terminado")
 
 class FEnd():
-    def __init__(self, value):
+    def __init__(self, value = None):
         self.value = value
     def eval(self):
         return print("Ciclos cerrados: " + self.value)

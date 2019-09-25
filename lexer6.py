@@ -49,6 +49,8 @@ class Lexer():
         self.lexer.add('MOV',r'Move')
         # Comment
         self.lexer.add('COMMENT', r'//')
+        #Times
+        self.lexer.add('TIMES',r'Times')
         #For Cycle
         self.lexer.add('FOR',r'For')
         #End Cycle
