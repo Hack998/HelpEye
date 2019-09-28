@@ -202,3 +202,34 @@ class Procedure():
         
     def eval(self):
         return print(self.name + " con " + str(self.value))
+    
+    
+
+class TemporalVars():
+    def __init__(self, miVar, valIni, increment, valFin, token):
+        self.miVar = miVar
+        self.valIni = int(valIni)
+        self.increment = int(increment)
+        self.valFin = int(valFin)
+        self.token = token
+        self.function = []
+        
+class Dow(TemporalVars):
+    def eval(self,declarations):
+        while True:
+            if (self.valIni)>=(self.valFin):
+                break
+            for i in declarations:
+                if i.name==self.miVar :
+                    i.value = (self.valIni)
+                    for x in self.function:
+                        try:
+                            x.eval(declarations)
+                        except:   
+                            x.eval()
+                
+            self.valIni+=self.increment
+            
+            
+    
+    

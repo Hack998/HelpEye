@@ -33,6 +33,8 @@ class Lexer():
         # Funciones
         # Import
         self.lexer.add('IMPORT',r'IMPORT')
+        #enddo
+        self.lexer.add('ENDDO',r'Enddo')
         # Call
         self.lexer.add('CALL',r'Call')
         # Inclination
@@ -41,6 +43,8 @@ class Lexer():
         self.lexer.add('INC',r'Inc')
         # Decrease
         self.lexer.add('DEC',r'Dec')
+        #dow
+        self.lexer.add('DOW',r'Dow')
         # Brightness
         self.lexer.add('BRIGHT',r'Brightness')
         # Vibration

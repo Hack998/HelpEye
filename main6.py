@@ -6,11 +6,11 @@ Created on Sat Aug 31 14:02:45 2019
 @author: samuel
 """
 
-from lexer6 import Lexer
-from parser6 import Parser
+from lexer8 import Lexer
+from parser8 import Parser
 
 
-path = 'C:/Users/david/Documents/Anaconda/Pruebas/input.txt'
+path = 'C:/Users/eduso/Downloads/Compressed/Viernes/HelpEye-master/input.txt'
 data = open(path,'r')
 
 text_input = data.read()
