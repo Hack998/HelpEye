@@ -41,19 +41,19 @@ class Lexer():
         self.lexer.add('INC',r'Inc')
         # Decrease
         self.lexer.add('DEC',r'Dec')
-        #Brightness
+        # Brightness
         self.lexer.add('BRIGHT',r'Brightness')
-        #Vibration
+        # Vibration
         self.lexer.add('VIB',r'Vibration')
-        #Move
+        # Move
         self.lexer.add('MOV',r'Move')
         # Comment
         self.lexer.add('COMMENT', r'//')
-        #Times
+        # Times
         self.lexer.add('TIMES',r'Times')
-        #For Cycle
+        # For Cycle
         self.lexer.add('FOR',r'For')
-        #End Cycle
+        # End Cycle
         self.lexer.add('FEND',r'Fend')
         # Procedure
         self.lexer.add('PROCEDURE', r'Procedure')
