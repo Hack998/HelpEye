@@ -1,21 +1,14 @@
-// Principal
-
-DECLARE x = 1;
-
-Procedure Main ( )
+// principal
+DECLARE x;
+DECLARE y;
+Procedure Main()
 begin
 
-CASE
-WHEN x = 1 THEN
-	CASE
-		WHEN x = 1 THEN 
-			Inc(5,3);
-		ELSE
-			Inc(2,3);
-	END CASE;
-	Inc(4,6);
-ELSE
-	Inc(2,2);
-END CASE;
+Dow(x,1,1,2)
+Inc(1,1);
+Dow(y,1,1,3)
+Inc(2,2);
+Enddo;
+Enddo;
 
 end;

@@ -7,9 +7,9 @@ Created on Sat Aug 31 14:26:52 2019
 """
 
 from rply import ParserGenerator
-from ast6 import Number, Inc, Dec, Inclination, Call, Procedure, Variable, Import, Brightness, Vibration, Move, For, FEnd, Case, When
+from ast8 import Number, Inc, Dec, Inclination, Call, Procedure, Variable, Brightness, Vibration, Move, For, FEnd, Dow, Case, When
 from parser1 import Parserr
-from lexer6 import Lexer
+from lexer8 import Lexer
 
 
 class Parser():
@@ -17,9 +17,9 @@ class Parser():
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
             ['DECLARE', 'EQUAL', 'NUMBER', 'INC', 'DEC', 'OPEN_PAREN', 'CLOSE_PAREN',
-             'SEMI_COLON', 'COMMA', 'POINT', 'COMMENT', 'TEXT', 'INCLI', 'FOR', 'FEND', 
-             'IMPORT', 'CALL', 'TIMES', 'BRIGHT', 'VIB', 'MOV', 'CASE', 'WHEN', 'THEN',
-             'ELSE', 'END_CASE', 'MAIN', 'PROCEDURE', 'BEGIN', 'END']
+             'SEMI_COLON', 'COMMA', 'POINT', 'COMMENT', 'TEXT', 'INCLI', 
+             'IMPORT', 'CALL', 'TIMES', 'CASE', 'WHEN', 'THEN','ELSE', 'END_CASE', 'MAIN', 
+             'PROCEDURE', 'BEGIN', 'END', 'BRIGHT', 'VIB', 'MOV', 'FOR', 'DOW', 'ENDDO', 'FEND']
         )
         self.comment = ""
         self.case = ""
@@ -29,6 +29,7 @@ class Parser():
         self.declarations = []
         self.fort = ""
         self.whenDec = []
+        self.dow = ''
 
     def parse(self):
         @self.pg.production('x : ')
@@ -157,6 +158,15 @@ class Parser():
                 i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
                 j = len(self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec) - 1
                 return (self.case.whenDec[len(self.case.whenDec) - 1]).function[i].whenDec[j].function.append(Inc(left, right))
+            elif self.token == 9:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.dow.function.append(Inc(left, right)))
+            elif self.token == -9:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.dow.function[len(self.dow.function)-1].function.append(Inc(left, right)))
+                
         
         # Decremento
         @self.pg.production('y : DEC OPEN_PAREN NUMBER COMMA NUMBER CLOSE_PAREN SEMI_COLON')
@@ -180,7 +190,7 @@ class Parser():
             elif self.token == 5:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
-                return
+                return 1 #print((Dec(left, right)).eval()
             elif self.token == 6:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
@@ -199,6 +209,15 @@ class Parser():
                 i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
                 j = len(self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec) - 1
                 return (self.case.whenDec[len(self.case.whenDec) - 1]).function[i].whenDec[j].function.append(Dec(left, right))
+            elif self.token == 9:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.dow.function.append(Dec(left, right)))
+            elif self.token == -9:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.dow.function[len(self.dow.function)-1].function.append(Dec(left, right)))
+                
         
         # Comentario
         @self.pg.production('y : COMMENT z')
@@ -247,6 +266,15 @@ class Parser():
                 i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
                 j = len(self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec) - 1
                 return (self.case.whenDec[len(self.case.whenDec) - 1]).function[i].whenDec[j].function.append(Inclination(p[2].value))
+            elif self.token == 9:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.dow.function.append(Inclination(left, right)))
+            elif self.token == -9:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.dow.function[len(self.dow.function)-1].function.append(Inclination(left, right)))
+                
    
         #Iluminacion
         @self.pg.production('y : BRIGHT OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
@@ -374,6 +402,15 @@ class Parser():
                 i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
                 j = len(self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec) - 1
                 return (self.case.whenDec[len(self.case.whenDec) - 1]).function[i].whenDec[j].function.append(Call(p[1].value))
+            elif self.token == 9:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.dow.function.append(Call(left, right)))
+            elif self.token == -9:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.dow.function[len(self.dow.function)-1].function.append(Call(left, right)))
+                
             
         
         @self.pg.production('y : CALL TEXT OPEN_PAREN args CLOSE_PAREN SEMI_COLON')
@@ -412,6 +449,15 @@ class Parser():
                 (self.case.whenDec[len(self.procedures) - 1]).function[i].whenDec[j].function.append(Call(p[1].value, self.arguments))
                 self.arguments = []
                 return
+            elif self.token == 9:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.dow.function.append(Call(left, right)))
+            elif self.token == -9:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.dow.function[len(self.dow.function)-1].function.append(Call(left, right)))
+                
             
         #For
         @self.pg.production('y : FOR NUMBER TIMES')
@@ -544,7 +590,28 @@ class Parser():
                 return (self.procedures[len(self.procedures) - 1]).eval()
             if self.token == 5:
                 return
-            
+        ##Dow
+        @self.pg.production('y : DOW OPEN_PAREN TEXT COMMA NUMBER COMMA NUMBER COMMA NUMBER CLOSE_PAREN')
+        def dowN(p):
+            miVar = p[2].value
+            valIni = (p[4].value)
+            increment = (p[6].value)
+            valFin = (p[8].value)
+            if self.token == 9:
+                self.dow.function.append(Dow(miVar,valIni,increment,valFin,self.token))
+                self.token = -9
+            else:
+                self.dow = Dow(miVar,valIni,increment,valFin,self.token)
+                self.token=9
+                return 
+        
+        @self.pg.production('y : ENDDO SEMI_COLON')
+        def dowe(p):
+            if self.token == -9:
+                self.token = 9
+            else:
+                self.dow.eval(self.declarations)
+                self.token = self.dow.token
         
         # Argumentos
         @self.pg.production('args : NUMBER COMMA args')
