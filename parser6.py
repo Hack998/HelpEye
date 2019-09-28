@@ -7,7 +7,7 @@ Created on Sat Aug 31 14:26:52 2019
 """
 
 from rply import ParserGenerator
-from ast6 import Number, Inc, Dec, Inclination, Call, Procedure, Variable, Import, Brightness, Vibration, Move, For, FEnd
+from ast6 import Number, Inc, Dec, Inclination, Call, Procedure, Variable, Import, Brightness, Vibration, Move, For, FEnd, Case, When
 from parser1 import Parserr
 from lexer6 import Lexer
 
@@ -17,9 +17,9 @@ class Parser():
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
             ['DECLARE', 'EQUAL', 'NUMBER', 'INC', 'DEC', 'OPEN_PAREN', 'CLOSE_PAREN',
-             'SEMI_COLON', 'COMMA', 'POINT', 'COMMENT', 'TEXT', 'INCLI', 
-             'IMPORT', 'CALL', 'TIMES', 'CASE', 'WHEN', 'THEN','ELSE', 'END_CASE', 'MAIN', 
-             'PROCEDURE', 'BEGIN', 'END']
+             'SEMI_COLON', 'COMMA', 'POINT', 'COMMENT', 'TEXT', 'INCLI', 'FOR', 'FEND', 
+             'IMPORT', 'CALL', 'TIMES', 'BRIGHT', 'VIB', 'MOV', 'CASE', 'WHEN', 'THEN',
+             'ELSE', 'END_CASE', 'MAIN', 'PROCEDURE', 'BEGIN', 'END']
         )
         self.comment = ""
         self.case = ""
@@ -177,7 +177,7 @@ class Parser():
             elif self.token == 5:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
-                return print((Dec(left, right)).eval()
+                return
             elif self.token == 6:
                 left = Number(p[2].value)
                 right = Number(p[4].value)

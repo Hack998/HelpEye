@@ -10,7 +10,7 @@ from lexer6 import Lexer
 from parser6 import Parser
 
 
-path = 'C:/Users/david/Documents/Anaconda/HelpEye-master/input.txt'
+path = 'C:/Users/david/Documents/Anaconda/Pruebas/input.txt'
 data = open(path,'r')
 
 text_input = data.read()
