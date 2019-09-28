@@ -18,14 +18,17 @@ class Parser():
             # A list of all token names accepted by the parser.
             ['DECLARE', 'EQUAL', 'NUMBER', 'INC', 'DEC', 'OPEN_PAREN', 'CLOSE_PAREN',
              'SEMI_COLON', 'COMMA', 'POINT', 'COMMENT', 'TEXT', 'INCLI', 
-             'IMPORT', 'CALL', 'TIMES', 'MAIN', 'PROCEDURE', 'BEGIN', 'END']
+             'IMPORT', 'CALL', 'TIMES', 'CASE', 'WHEN', 'THEN','ELSE', 'END_CASE', 'MAIN', 
+             'PROCEDURE', 'BEGIN', 'END']
         )
         self.comment = ""
+        self.case = ""
         self.procedures = []
         self.token = 0
         self.arguments = []
         self.declarations = []
         self.cycle = []
+        self.whenDec = []
 
     def parse(self):
         @self.pg.production('x : ')
@@ -42,13 +45,11 @@ class Parser():
         @self.pg.production('y : DECLARE TEXT EQUAL NUMBER SEMI_COLON')
         def declare(p):
             self.declarations.append(Variable(p[1].value, p[3].value))
-            print("1")
             return
         
         @self.pg.production('y : DECLARE TEXT SEMI_COLON')
         def emptyDeclare(p):
             self.declarations.append(Variable(p[1].value))
-            print("2")
             return
         
         @self.pg.production('y : TEXT EQUAL NUMBER SEMI_COLON')
@@ -64,8 +65,56 @@ class Parser():
                         
                     return True
                 else:
-                    print("4")
                     return False
+        
+        # Case
+        @self.pg.production('y : CASE')
+        def case(p):
+            if(self.token == 8):
+                self.case.whenDec[len(self.case.whenDec) - 1].function.append(Case(self.token))
+                self.token = -8
+            else:
+                if(self.token == 3 or self.token == 5):
+                    self.case = Case(self.token)
+                    self.token = 7
+            return
+        
+        @self.pg.production('y : WHEN TEXT EQUAL NUMBER THEN')
+        def caseWhen(p):
+            if(self.token == -8):
+                i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
+                self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec.append(When(p[1].value, p[3].value))
+            else:   
+                self.case.whenDec.append(When(p[1].value, p[3].value))
+                self.token = 8
+            return
+        
+        @self.pg.production('y : ELSE')
+        def caseElse(p): 
+            if(self.token == -8):
+                i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
+                self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec.append(When(None, None))
+            else:
+                self.case.whenDec.append(When(None, None))
+                self.token = 8
+            return
+        
+        @self.pg.production('y : END_CASE SEMI_COLON')
+        def caseEnd(p):
+            if(self.case.cToken == 3):                
+                self.procedures[len(self.procedures) - 1].array.append(self.case)
+                self.token = 3
+                
+            elif(self.token == -8):
+                self.token = 8
+                
+            elif(self.case.cToken == 5):
+                self.case.eval(self.declarations)
+                self.token = 5
+            
+                
+            print("END")
+            return
         
         # Incremento
         @self.pg.production('y : INC OPEN_PAREN NUMBER COMMA NUMBER CLOSE_PAREN SEMI_COLON')
@@ -95,6 +144,16 @@ class Parser():
                 right = Number(p[4].value)
                 self.cycle = []
                 return (self.cycle[0]).array.append(Inc(left, right))
+            elif self.token == 8:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.case.whenDec[len(self.case.whenDec) - 1]).function.append(Inc(left, right))
+            elif self.token == -8:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
+                j = len(self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec) - 1
+                return (self.case.whenDec[len(self.case.whenDec) - 1]).function[i].whenDec[j].function.append(Inc(left, right))
         
         # Decremento
         @self.pg.production('y : DEC OPEN_PAREN NUMBER COMMA NUMBER CLOSE_PAREN SEMI_COLON')
@@ -118,12 +177,22 @@ class Parser():
             elif self.token == 5:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
-                return print((Dec(left, right)).eval())
+                return print((Dec(left, right)).eval()
             elif self.token == 6:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
                 self.cycle = []
                 return (self.cycle[0]).array.append(Dec(left, right))
+            elif self.token == 8:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.case.whenDec[len(self.case.whenDec) - 1]).function.append(Dec(left, right))
+            elif self.token == -8:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
+                j = len(self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec) - 1
+                return (self.case.whenDec[len(self.case.whenDec) - 1]).function[i].whenDec[j].function.append(Dec(left, right))
         
         # Comentario
         @self.pg.production('y : COMMENT z')
@@ -165,7 +234,13 @@ class Parser():
             elif self.token == 6:
                 self.cycle = []
                 return (self.cycle[0]).array.append(Inclination(p[2].value))
-            
+            elif self.token == 8:
+                return (self.case.whenDec[len(self.case.whenDec) - 1]).function.append(Inclination(p[2].value))
+            elif self.token == 8:
+                i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
+                j = len(self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec) - 1
+                return (self.case.whenDec[len(self.case.whenDec) - 1]).function[i].whenDec[j].function.append(Inclination(p[2].value))
+   
         #Iluminacion
         @self.pg.production('y : BRIGHT OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
         def BrightnessP(p):
@@ -188,7 +263,7 @@ class Parser():
             elif self.token == 6:
                 self.cycle = []
                 return (self.cycle[0]).array.append(Brightness(p[2].value))
-        
+
         #Vibracion
         @self.pg.production('y : VIB OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
         def VibrationP(p):
@@ -211,7 +286,7 @@ class Parser():
             elif self.token == 6:
                 self.cycle = []
                 return (self.cycle[0]).array.append(Vibration(p[2].value))
-        
+
         #Movimientos
         @self.pg.production('y : MOV OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
         def MoveP(p):
@@ -242,7 +317,6 @@ class Parser():
                 raise SystemExit("No se ha puesto un comentario al inicio")
                 return
             elif self.token == 2:
-                
                 data = open(p[1].value + p[2].value + p[3].value,'r')
                 text_input = data.read()
                 
@@ -279,10 +353,16 @@ class Parser():
                 raise SystemExit("Call esta fuera de un procedimiento")
                 return
             elif self.token == 5:
-                return (Call(p[1].value)).eval(self.procedures)
+                return (Call(p[1].value)).eval(self.procedures, self.declarations)
             elif self.token == 6:
                 self.cycle = []
                 return (self.cycle[0]).array.append(Call(p[1].value))
+            elif self.token == 8:
+                return (self.case.whenDec[len(self.case.whenDec) - 1]).function.append(Call(p[1].value))
+            elif self.token == -8:
+                i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
+                j = len(self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec) - 1
+                return (self.case.whenDec[len(self.case.whenDec) - 1]).function[i].whenDec[j].function.append(Call(p[1].value))
             
         
         @self.pg.production('y : CALL TEXT OPEN_PAREN args CLOSE_PAREN SEMI_COLON')
@@ -304,15 +384,24 @@ class Parser():
                 raise SystemExit("Call() esta fuera de un procedimiento")
                 return
             elif self.token == 5:
-                (Call(p[1].value, self.arguments)).eval(self.procedures)
+                (Call(p[1].value, self.arguments)).eval(self.procedures, self.declarations)
                 self.arguments = []
                 return
             elif self.token == 6:
                 self.cycle = []
                 (self.cycle[0]).array.append(Call(p[1].value, self.arguments))
                 return
-             
-         #For
+            elif self.token == 8:
+                (self.case.whenDec[len(self.procedures) - 1]).function.append(Call(p[1].value, self.arguments))
+                self.arguments = []
+                return
+            elif self.token == -8:
+                i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
+                (self.case.whenDec[len(self.procedures) - 1]).function[i].whenDec[j].function.append(Call(p[1].value, self.arguments))
+                self.arguments = []
+                return
+            
+        #For
         @self.pg.production('y : FOR NUMBER TIMES')
         def ForP(p):
             if self.token == 0:
@@ -340,14 +429,14 @@ class Parser():
                 self.cycle = []
                 (self.cycle[0]).array.append(For(p[1].value))
                 return
-        
+
         #FEnd
         @self.pg.production('y : FEND SEMI_COLON')
         def FEndP(p):
             if self.token == 6:
                 self.token = 3
-            return       
-        
+            return           
+            
         # Procedure Begin
         @self.pg.production('y : PROCEDURE TEXT OPEN_PAREN args CLOSE_PAREN BEGIN')
         def prodNP(p):
@@ -373,6 +462,9 @@ class Parser():
             elif self.token == 5:
                 raise SystemExit("No se puede crear un procedimiento dentro del Main")
                 return
+            elif self.token == 8:
+                raise SystemExit("No se puede crear un procedimiento dentro de otro")
+                return
             
         
         @self.pg.production('y : PROCEDURE TEXT OPEN_PAREN CLOSE_PAREN BEGIN')
@@ -397,6 +489,9 @@ class Parser():
             elif self.token == 5:
                 raise SystemExit("No se puede crear un procedimiento dentro del Main")
                 return
+            elif self.token == 8:
+                raise SystemExit("No se puede crear un procedimiento dentro de otro")
+                return
             
         
         # Main
@@ -420,6 +515,9 @@ class Parser():
             elif self.token == 5:
                 raise SystemExit("Ya existe un Main")
                 return
+            elif self.token == 8:
+                raise SystemExit("No se puede crear un Main dentro de un procedimiento")
+                return
         
         # Procedure End
         @self.pg.production('y : END SEMI_COLON')
@@ -437,7 +535,7 @@ class Parser():
             self.arguments.append(int(p[0].value))
             return
         
-        @self.pg.production('args : NUMBER')
+        @self.pg.production('args : NUMBER') 
         def args(p):
             self.arguments.append(int(p[0].value))
             return

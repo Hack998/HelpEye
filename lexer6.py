@@ -18,13 +18,13 @@ class Lexer():
         self.lexer.add('CLOSE_PAREN',r'\)')
         # Comma
         self.lexer.add('COMMA', r'\,')
-         # Comma
+        # Comma
         self.lexer.add('POINT', r'\.')
         # Semi Colon
         self.lexer.add('SEMI_COLON',r'\;')
-        #Equal simbol
+        # Equal simbol
         self.lexer.add('EQUAL', r'\=')
-        #Declare
+        # Declare
         self.lexer.add('DECLARE', r'DECLARE')
         # Number
         self.lexer.add('NUMBER', r'\d+')
@@ -55,6 +55,16 @@ class Lexer():
         self.lexer.add('FOR',r'For')
         # End Cycle
         self.lexer.add('FEND',r'Fend')
+        # Case
+        self.lexer.add('CASE', r'CASE')
+        # When
+        self.lexer.add('WHEN', r'WHEN')
+        # Then
+        self.lexer.add('THEN', r'THEN')
+        # Else
+        self.lexer.add('ELSE', r'ELSE')
+        # End Case
+        self.lexer.add('END_CASE', r'END CASE')
         # Procedure
         self.lexer.add('PROCEDURE', r'Procedure')
         # Begin

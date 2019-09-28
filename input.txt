@@ -1,18 +1,21 @@
-// Extracion
-IMPORT /home/samuel/Escritorio/Compi/ProyectoPrueba/eye/inputex.txt
-
-// Funcion
-Procedure suma ( 8 , 9 , 6)
-begin
-Inc(1,1);
-end;
-
 // Principal
+
+DECLARE x = 1;
+
 Procedure Main ( )
 begin
 
-Inc ( 0 , 1 );
-Call suma(8,9,6);
-Call resta;
+CASE
+WHEN x = 1 THEN
+	CASE
+		WHEN x = 1 THEN 
+			Inc(5,3);
+		ELSE
+			Inc(2,3);
+	END CASE;
+	Inc(4,6);
+ELSE
+	Inc(2,2);
+END CASE;
 
 end;

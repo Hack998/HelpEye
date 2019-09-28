@@ -22,6 +22,7 @@ class BinaryOp():
     
 class Inc(BinaryOp):
     def eval(self):
+        print(self.left.eval() + self.right.eval())
         return self.left.eval() + self.right.eval()
     
 class Dec(BinaryOp):
@@ -33,6 +34,51 @@ class Variable():
     def __init__(self, name, value=None):
         self.name = name 
         self.value = value 
+
+# Class CASE
+class Case():
+    def __init__(self, cToken):
+        self.whenDec = []
+        self.cToken = cToken   
+        
+    def insertWhen(self, value):
+        self.whenDec.append = value        
+    
+    def eval(self, declarations):
+        wCopy = self.whenDec
+        for i in wCopy:
+            if(i.eval(declarations)):
+                print("Hey you!")
+                break
+            
+# Class WHEN Function
+class When():
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+        self.function = []
+    
+    def insertFunc(self, value):
+        self.function.append = value  
+        
+    def eval(self, declarations):
+        dCopy = declarations
+        if(self.name == None and self.value == None):
+            for x in self.function:
+                try:
+                    x.eval(declarations)
+                except:
+                    x.eval()
+            return True
+        for i in dCopy:
+            if((i.name == self.name) and (i.value == self.value)):
+                for x in self.function:
+                    try:
+                        x.eval(declarations)
+                    except:
+                        x.eval()
+                return True
+        return False
     
 class Inclination():
     def __init__(self, value):
@@ -42,10 +88,11 @@ class Inclination():
         if int(self.value) >= 15:
             return "Peligro"
         return "Safe"
-
+    
 class Brightness():
     def __init__(self, value):
         self.value = value
+        
     def eval(self):
         if int(self.value) >= 15:
             return print("Very bright")
@@ -55,16 +102,18 @@ class Brightness():
             return print("Safe")
 
 class Move():
-    def __init__(self, value):
-        self.value = value
-    def eval(self):
-        if int(self.value) >= 15:
-            return print("Peligro")
-        return print("Safe")
+        def __init__(self, value):
+            self.value = value
+        
+        def eval(self):
+            if int(self.value) >= 15:
+                return print("Peligro")
+            return print("Safe")
 
 class Vibration():
     def __init__(self, value):
         self.value = value
+        
     def eval(self):
         if int(self.value) >= 15:
             return print("Peligro")
@@ -75,7 +124,7 @@ class Call():
         self.name = name
         self.value = value
 
-    def eval(self, procedures):
+    def eval(self, procedures, declarations):
         arr = procedures
         if self.value == None:
             i = -1
@@ -88,7 +137,10 @@ class Call():
                             try:
                                 x.eval(procedures)
                             except:
-                                print(x.eval())
+                                try:
+                                    x.eval(declarations)
+                                except:    
+                                    print(x.eval())
                         return 
             print("El procedimiento llamado no existe")
         self.value.reverse()
@@ -128,7 +180,7 @@ class FEnd():
         self.value = value
     def eval(self):
         return print("Ciclos cerrados: " + self.value)
-    
+   
 class Import():
     def __init__(self, rute):
         self.rute = rute
