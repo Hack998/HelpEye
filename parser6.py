@@ -27,7 +27,7 @@ class Parser():
         self.token = 0
         self.arguments = []
         self.declarations = []
-        self.cycle = []
+        self.fort = ""
         self.whenDec = []
 
     def parse(self):
@@ -142,8 +142,11 @@ class Parser():
             elif self.token == 6:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
-                self.cycle = []
-                return (self.cycle[0]).array.append(Inc(left, right))
+                return (self.fort.cycle).append(Inc(left, right))
+            elif self.token == -6:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.fort.cycle[len(self.fort.cycle) - 1]).cycle.append(Inc(left, right))
             elif self.token == 8:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
@@ -181,8 +184,11 @@ class Parser():
             elif self.token == 6:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
-                self.cycle = []
-                return (self.cycle[0]).array.append(Dec(left, right))
+                return (self.fort.cycle).append(Dec(left, right))
+            elif self.token == -6:
+                left = Number(p[2].value)
+                right = Number(p[4].value)
+                return (self.fort.cycle[len(self.fort.cycle) - 1]).cycle.append(Dec(left, right))
             elif self.token == 8:
                 left = Number(p[2].value)
                 right = Number(p[4].value)
@@ -232,8 +238,9 @@ class Parser():
             elif self.token == 5:
                 return (Inclination(p[2].value)).eval()
             elif self.token == 6:
-                self.cycle = []
-                return (self.cycle[0]).array.append(Inclination(p[2].value))
+                return (self.fort.cycle).append(Inclination(p[2].value))
+            elif self.token == -6:
+                return (self.fort.cycle[len(self.fort.cycle) - 1]).cycle.append(Inclination(p[2].value))
             elif self.token == 8:
                 return (self.case.whenDec[len(self.case.whenDec) - 1]).function.append(Inclination(p[2].value))
             elif self.token == 8:
@@ -261,8 +268,9 @@ class Parser():
             elif self.token == 5:
                 return (Brightness(p[2].value)).eval()
             elif self.token == 6:
-                self.cycle = []
-                return (self.cycle[0]).array.append(Brightness(p[2].value))
+                return (self.fort.cycle).append(Brightness(p[2].value))
+            elif self.token == -6:
+                return (self.fort.cycle[len(self.fort.cycle) - 1]).cycle.append(Brightness(p[2].value))
 
         #Vibracion
         @self.pg.production('y : VIB OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
@@ -284,8 +292,9 @@ class Parser():
             elif self.token == 5:
                 return (Vibration(p[2].value)).eval()
             elif self.token == 6:
-                self.cycle = []
-                return (self.cycle[0]).array.append(Vibration(p[2].value))
+                return (self.fort.cycle).append(Vibration(p[2].value))
+            elif self.token == -6:
+                return (self.fort.cycle[len(self.fort.cycle) - 1]).cycle.append(Vibration(p[2].value))
 
         #Movimientos
         @self.pg.production('y : MOV OPEN_PAREN NUMBER CLOSE_PAREN SEMI_COLON')
@@ -307,8 +316,9 @@ class Parser():
             elif self.token == 5:
                 return (Move(p[2].value)).eval()
             elif self.token == 6:
-                self.cycle = []
-                return (self.cycle[0]).array.append(Move(p[2].value))
+                return (self.fort.cycle).append(Move(p[2].value))
+            elif self.token == -6:
+                return (self.fort.cycle[len(self.fort.cycle) - 1]).cycle.append(Move(p[2].value))
         
         # Import
         @self.pg.production('y : IMPORT TEXT POINT TEXT')
@@ -355,8 +365,9 @@ class Parser():
             elif self.token == 5:
                 return (Call(p[1].value)).eval(self.procedures, self.declarations)
             elif self.token == 6:
-                self.cycle = []
-                return (self.cycle[0]).array.append(Call(p[1].value))
+                return (self.fort.cycle).append(Call(p[1].value))
+            elif self.token == -6:
+                return (self.fort.cycle[len(self.fort.cycle) - 1]).cycle.append(Call(p[1].value))
             elif self.token == 8:
                 return (self.case.whenDec[len(self.case.whenDec) - 1]).function.append(Call(p[1].value))
             elif self.token == -8:
@@ -388,15 +399,16 @@ class Parser():
                 self.arguments = []
                 return
             elif self.token == 6:
-                self.cycle = []
-                (self.cycle[0]).array.append(Call(p[1].value, self.arguments))
-                return
+                return (self.fort.cycle).append(Call(p[1].value, self.arguments))
+            elif self.token == -6:
+                return (self.fort.cycle[len(self.fort.cycle) - 1]).cycle.append(Call(p[1].value, self.arguments))
             elif self.token == 8:
                 (self.case.whenDec[len(self.procedures) - 1]).function.append(Call(p[1].value, self.arguments))
                 self.arguments = []
                 return
             elif self.token == -8:
                 i = len(self.case.whenDec[len(self.case.whenDec) - 1].function) - 1
+                j = len(self.case.whenDec[len(self.case.whenDec) - 1].function[i].whenDec) - 1
                 (self.case.whenDec[len(self.procedures) - 1]).function[i].whenDec[j].function.append(Call(p[1].value, self.arguments))
                 self.arguments = []
                 return
@@ -414,28 +426,33 @@ class Parser():
                 raise SystemExit("For() esta fuera de un procedimiento")
                 return
             elif self.token == 3:
-                (self.procedures[len(self.procedures) - 1]).array.append(For(p[1].value))
+                self.fort = For(p[1].value, self.token)
+                (self.procedures[len(self.procedures - 1)]).array.append(self.fort)
                 self.token = 6
-                self.arguments = []
-                return
             elif self.token == 4:
-                raise SystemExit("Call() esta fuera de un procedimiento")
+                raise SystemExit("For() esta fuera de un procedimiento")
                 return
             elif self.token == 5:
+                self.fort = For(p[1].value, self.token)
                 self.token = 6
-                (For(p[1].value)).eval(self.cycle)
                 return
             elif self.token == 6:
-                self.cycle = []
-                (self.cycle[0]).array.append(For(p[1].value))
+                (self.fort.cycle).append(For(p[1].value, self.token))
+                return
+            elif self.token == -6:
+                (self.fort.cycle[len(self.fort.cycle) - 1]).cycle.append(For(p[1].value, self.token))
                 return
 
         #FEnd
         @self.pg.production('y : FEND SEMI_COLON')
         def FEndP(p):
             if self.token == 6:
-                self.token = 3
-            return           
+                if self.fort.token == 5:
+                    self.fort.evalf(self.procedures, self.declarations, [])
+                    self.token = self.fort.token
+                elif self.fort.token == 3:
+                    self.token = self.fort.token
+            return
             
         # Procedure Begin
         @self.pg.production('y : PROCEDURE TEXT OPEN_PAREN args CLOSE_PAREN BEGIN')

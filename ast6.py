@@ -159,27 +159,46 @@ class Call():
         print("El procedimiento llamado no existe")
 
 class For():
-    def __init__(self, value):
-        self.value = value
-    def eval(self, procedures):
-        while(self.value > 0):
-            for x in procedures:
-                try:
-                    x.eval(procedures)
-                except:
-                    print(x.eval())
-                    return
+    def __init__(self, value, token):
+        self.value = int(value)
+        self.token = token
+        self.cycle = []
+    def evalf(self, procedures, declarations, local):
+        if local != []:
+            while (self.value > 0):
+                for x in self.cycle:
+                    try:
+                        x.eval(procedures, declarations)
+                    except:
+                        try:
+                            j = x.evalp(declarations, local)
+                            declarations = j[0]
+                            local = j[1]
+                        except:
+                            j = x.evalc(declarations, local)
+                            declarations = j[0]
+                            local = j[1]
+                self.value -= 1
             else:
-                print("El procedimiento no puede ser ciclado")
+                print("Ciclo terminado")
+                return [declarations, local]
+        while (self.value > 0):
+            for x in self.cycle:
+                try:
+                    x.eval(procedures, declarations)
+                except:
+                    try:
+                        j = x.evalp(declarations, local)
+                        declarations = j[0]
+                        local = j[1]
+                    except:
+                        j = x.evalc(declarations, local)
+                        declarations = j[0]
+                        local = j[1]
             self.value -= 1
         else:
             print("Ciclo terminado")
-
-class FEnd():
-    def __init__(self, value = None):
-        self.value = value
-    def eval(self):
-        return print("Ciclos cerrados: " + self.value)
+            return [declarations, local]
    
 class Import():
     def __init__(self, rute):
