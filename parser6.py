@@ -590,7 +590,7 @@ class Parser():
                 return (self.procedures[len(self.procedures) - 1]).eval()
             if self.token == 5:
                 return
-        ##Dow
+        # Dow
         @self.pg.production('y : DOW OPEN_PAREN TEXT COMMA NUMBER COMMA NUMBER COMMA NUMBER CLOSE_PAREN')
         def dowN(p):
             miVar = p[2].value
