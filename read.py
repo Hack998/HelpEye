@@ -10,6 +10,7 @@ from verificacion import Verificacion
 from main6 import Main
 import subprocess
 import os
+import time
 
 print ("Ingrese")
 print ("0 : Servidor de prueba")
@@ -22,27 +23,38 @@ if o.isdigit() == True:
     if o == 1:
         while (o == 1):
             # Lectura
-            path = "/home/samuel/Escritorio/Compi/Prueba/gcc/inputclient.txt"
+            path = "/home/samuel/Escritorio/Compi/Prueba/gcc/object_recognition_detection/testfile.txt"
             client = open(path,'r')
             
             a = client.read()
             q = -1
-            objeto, move, vibracion, inclinacion, temperatura, brightness, sounds= "","","","","","",""
+            
+            path = "/home/samuel/Escritorio/Compi/Prueba/gcc/gyu/datosarduino.txt"
+            client = open(path,'r')
+            
+            f = client.read()
+            objeto, move = "", ""
             for p in a:
                 if p.isdigit():
                     if q == 0:
                         objeto += p
                     elif q == 1:
                         move += p
-                    elif q == 2:
+                else:
+                    q += 1
+            vibracion, inclinacion, temperatura, brightness, sounds = "","","","",""
+            q = 0
+            for p in f:
+                if p.isdigit():
+                    if q == 0:
                         vibracion += p
-                    elif q == 3:
+                    elif q == 1:
                         inclinacion += p
-                    elif q == 4:
+                    elif q == 2:
                         temperatura += p
-                    elif q == 5:
+                    elif q == 3:
                         brightness += p
-                    elif q == 6:
+                    elif q == 4:
                         sounds += p
                 else:
                     q += 1
@@ -82,7 +94,7 @@ if o.isdigit() == True:
             y = y.replace(" " , "")
             print(y)
             
-            path = '/home/samuel/Escritorio/Compi/Prueba/gcc/outputclient.txt'
+            path = '/home/samuel/Escritorio/Compi/Prueba/gcc/gyu/datostoarduino.txt'
             file = open(path,'w')
             file.write(y)
             file.close()
@@ -90,8 +102,7 @@ if o.isdigit() == True:
             print("")
             print("Informacion enviada")
             print("")
-            
-            o = 0
+            time.sleep(5)
     elif o == 0:
         while(o == 0):
             # Obtener datos
@@ -158,7 +169,7 @@ if o.isdigit() == True:
             datosgen = datosgen.replace(" " , "")
             print(datosgen)
             
-            path = '/home/samuel/Escritorio/Compi/Prueba/gcc/outputclient.txt'
+            path = '/home/samuel/Escritorio/Compi/Prueba/gcc/gyu/datostoarduino.txt'
             file = open(path,'w')
             file.write(datosgen)
             file.close()
@@ -182,14 +193,15 @@ if o.isdigit() == True:
         print ("0 : For")
         print ("1 : Case")
         print ("2 : Dow")
+        print ("3 : Ciclos anidados")
         o = input()
         if o.isdigit() == True:
             o = int(o)
-            if (o < 0) or (o > 2):
-                raise SystemExit("Ingrese 0 o 1 o 2")
+            if (o < 0) or (o > 3):
+                raise SystemExit("Ingrese 0 o 1 o 2 o3")
         else:
             raise SystemExit("Ingrese numeros")
-        if o != 1:
+        if (o != 1 and o != 3):
             if o == 0:
                 print ("Ingrese, cuantos ciclos?")
             else:
@@ -211,16 +223,20 @@ if o.isdigit() == True:
             path = '/home/samuel/Escritorio/Compi/Prueba/gcc/importcase.txt'
             eval_path = '/home/samuel/Escritorio/Compi/Prueba/gcc/inputcase.txt'
             print("Case")
-        else:
+        elif o == 2:
             data = ("// import dow \nDECLARE y;\nProcedure dow ()\nbegin\nDow(y,1,2," + str(y) + ")\nTemperature(y);\nEnddo;\nend;")
             #data = ("// import dow \nDECLARE y = 1;\nProcedure dow ()\nbegin\nInclination(y);\nend;")
             path = '/home/samuel/Escritorio/Compi/Prueba/gcc/importdow.txt'
             eval_path = '/home/samuel/Escritorio/Compi/Prueba/gcc/inputdow.txt'
             print("Dow")
+        else:
+            eval_path = '/home/samuel/Escritorio/Compi/Prueba/gcc/inputg.txt'
+            print("Ciclos anidados")
         
-        file = open(path,'w')
-        file.write(data)
-        file.close()
+        if o != 3:
+            file = open(path,'w')
+            file.write(data)
+            file.close()
         
         print("")
         print("Compilador")
@@ -235,7 +251,7 @@ if o.isdigit() == True:
         print("")
         
     else:
-        print("Ingrese 0 o 1 o 2")
+        print("Ingrese 0 o 1 o 2 o 3")
 else:
     print("Ingrese numeros")
 print("Proceso Terminado")

@@ -193,7 +193,7 @@ class Parser():
                 self.case.whenDec[len(self.case.whenDec) - 1].function.append(Case(self.token))
                 self.token = -8
             else:
-                if(self.token == 3 or self.token == 5):
+                if(self.token == 3 or self.token == 5 or self.token == 6 or self.token == 9):
                     self.case = Case(self.token)
                     self.token = 7
             return
@@ -230,6 +230,13 @@ class Parser():
             elif(self.case.cToken == 5):
                 self.case.evalf(self.procedures,self.declarations,[])
                 self.token = 5
+            elif self.case.cToken == 6:
+                (self.fort.cycle).append(self.case)
+                self.token = 6
+            elif self.case.cToken == 9:
+                self.dow.function.append(self.case)
+                self.token = 9
+                
 
 
             print("END")
@@ -865,6 +872,14 @@ class Parser():
                 (self.fort.cycle).append(For(p[1].value,self.token))
                 self.token = -6
                 return
+            elif self.token == 8:
+                (self.case.whenDec[len(self.case.whenDec) - 1]).function.append(For(p[1].value,self.token))
+                self.token = 6
+                return
+            elif self.token == 9:
+                self.dow.function.append(For(p[1].value,self.token))
+                self.token = 6
+                return
         
         #FEnd
         @self.pg.production('y : FEND SEMI_COLON')
@@ -875,7 +890,7 @@ class Parser():
                 if self.fort.token == 5:
                     self.fort.evalf(self.procedures,self.declarations,[])
                     self.token = self.fort.token
-                elif self.fort.token == 3:
+                elif (self.fort.token == 3 or self.fort.token == 9 or self.fort.token == 8):
                     self.token = self.fort.token
             return
         
@@ -990,6 +1005,12 @@ class Parser():
         def dowe(p):
             if self.token == -9:
                 self.token = 9
+            elif self.dow.token == 6:
+                (self.fort.cycle).append(self.dow)
+                self.token = 6
+            elif self.dow.token == 8:
+                (self.case.whenDec[len(self.case.whenDec) - 1]).function.append(self.dow)
+                self.token = 8
             else:
                 self.dow.evalf(self.procedures,self.declarations,[])
                 self.token = self.dow.token

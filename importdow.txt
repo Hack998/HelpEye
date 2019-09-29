@@ -2,7 +2,7 @@
 DECLARE y;
 Procedure dow ()
 begin
-Dow(y,1,2,4)
+Dow(y,1,2,3)
 Temperature(y);
 Enddo;
 end;

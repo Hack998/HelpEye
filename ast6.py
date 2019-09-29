@@ -276,7 +276,7 @@ class Object():
         if local != []:
             for y in local:
                 if y.name == self.value:
-                    if int(y.value) >= 15:
+                    if int(y.value) <= 15:
                         
                         i = ir.Constant(ir.IntType(8), int(y.value))
             
@@ -296,7 +296,7 @@ class Object():
                     return[declarations,local]
         for x in declarations:
             if x.name == self.value:
-                if int(x.value) >= 15:
+                if int(x.value) <= 15:
                     
                     i = ir.Constant(ir.IntType(8), int(x.value))
             
@@ -328,7 +328,7 @@ class Sounds():
         if local != []:
             for y in local:
                 if y.name == self.value:
-                    if int(y.value) >= 15:
+                    if int(y.value) >= 100:
                         
                         i = ir.Constant(ir.IntType(8), int(y.value))
             
@@ -348,7 +348,7 @@ class Sounds():
                     return[declarations,local]
         for x in declarations:
             if x.name == self.value:
-                if int(x.value) >= 15:
+                if int(x.value) >= 100:
                     
                     i = ir.Constant(ir.IntType(8), int(x.value))
             
@@ -380,7 +380,7 @@ class Brightness():
         if local != []:
             for y in local:
                 if y.name == self.value:
-                    if int(y.value) >= 15:
+                    if int(y.value) >= 150:
                         i = ir.Constant(ir.IntType(8), int(y.value))
             
                         fmt = "Very bright \n\0"
@@ -389,7 +389,7 @@ class Brightness():
                         
                         print("Very bright")
                         return[declarations,local]
-                    elif int(y.value) <= 0:
+                    elif int(y.value) <= 30:
                         i = ir.Constant(ir.IntType(8), int(y.value))
             
                         fmt = "Very dark \n\0"
@@ -409,7 +409,7 @@ class Brightness():
                         return[declarations,local]
         for x in declarations:
             if x.name == self.value:
-                if int(x.value) >= 15:
+                if int(x.value) >= 150:
                     i = ir.Constant(ir.IntType(8), int(x.value))
             
                     fmt = "Very bright \n\0"
@@ -418,7 +418,7 @@ class Brightness():
                         
                     print("Very bright")
                     return[declarations,local]
-                elif int(x.value) <= 0:
+                elif int(x.value) <= 30:
                     i = ir.Constant(ir.IntType(8), int(x.value))
             
                     fmt = "Very dark \n\0"
@@ -449,7 +449,7 @@ class Temperature():
         if local != []:
             for y in local:
                 if y.name == self.value:
-                    if int(y.value) >= 30:
+                    if int(y.value) >= 37:
                         i = ir.Constant(ir.IntType(8), int(y.value))
             
                         fmt = "Hot \n\0"
@@ -478,7 +478,7 @@ class Temperature():
                         return[declarations,local]
         for x in declarations:
             if x.name == self.value:
-                if int(x.value) >= 30:
+                if int(x.value) >= 37:
                     i = ir.Constant(ir.IntType(8), int(x.value))
             
                     fmt = "Hot \n\0"
@@ -519,7 +519,7 @@ class Move():
         if local != []:
             for y in local:
                 if y.name == self.value:
-                    if int(y.value) >= 15:
+                    if int(y.value) <= 15:
                         
                         i = ir.Constant(ir.IntType(8), int(y.value))
             
@@ -539,7 +539,7 @@ class Move():
                     return[declarations,local]
         for x in declarations:
             if x.name == self.value:
-                if int(x.value) >= 15:
+                if int(x.value) <= 15:
                     i = ir.Constant(ir.IntType(8), int(x.value))
             
                     fmt = "Peligro \n\0"
@@ -570,7 +570,7 @@ class Vibration():
         if local != []:
             for y in local:
                 if y.name == self.value:
-                    if int(y.value) >= 15:
+                    if int(y.value) >= 90:
                         i = ir.Constant(ir.IntType(8), int(y.value))
             
                         fmt = "Peligro \n\0"
@@ -589,7 +589,7 @@ class Vibration():
                     return[declarations,local]
         for x in declarations:
             if x.name == self.value:
-                if int(x.value) >= 15:
+                if int(x.value) >= 90:
                     i = ir.Constant(ir.IntType(8), int(x.value))
             
                     fmt = "Peligro \n\0"

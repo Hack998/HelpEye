@@ -1,8 +1,8 @@
 // datos 
-DECLARE x = 12;
-DECLARE y = 13;
-DECLARE z = 14;
-DECLARE c = 15;
-DECLARE v = 16;
-DECLARE b = 17;
-DECLARE n = 18;
+DECLARE x = 30;
+DECLARE y = 30;
+DECLARE z = ;
+DECLARE c = ;
+DECLARE v = ;
+DECLARE b = ;
+DECLARE n = ;

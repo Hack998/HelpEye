@@ -18,7 +18,7 @@ class Main():
 
         lexer = Lexer().get_lexer()
         tokens = lexer.lex(text_input)
-
+        
         codegen = CodeGen()
 
         module = codegen.module
