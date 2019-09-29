@@ -1,0 +1,8 @@
+// import dow 
+DECLARE y;
+Procedure dow ()
+begin
+Dow(y,1,2,4)
+Temperature(y);
+Enddo;
+end;

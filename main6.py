@@ -6,19 +6,30 @@ Created on Sat Aug 31 14:02:45 2019
 @author: samuel
 """
 
-from lexer8 import Lexer
-from parser8 import Parser
+from lexer6 import Lexer
+from parser6 import Parser
+from gen6 import CodeGen
 
+class Main():
+    def eval(self, path):
+        data = open(path,'r')
+        
+        text_input = data.read()
 
-path = 'C:/Users/eduso/Downloads/Compressed/Viernes/HelpEye-master/input.txt'
-data = open(path,'r')
+        lexer = Lexer().get_lexer()
+        tokens = lexer.lex(text_input)
 
-text_input = data.read()
+        codegen = CodeGen()
 
-lexer = Lexer().get_lexer()
-tokens = lexer.lex(text_input)
+        module = codegen.module
+        builder = codegen.builder
+        printf = codegen.printf
 
-pg = Parser()
-pg.parse()
-parser = pg.get_parser()
-parser.parse(tokens)
+        pg = Parser(module, builder, printf)
+        pg.parse()
+        parser = pg.get_parser()
+        parser.parse(tokens)
+
+        codegen.create_ir()
+        codegen.save_ir("/home/samuel/Escritorio/Compi/Prueba/gcc/output.ll")
+        return

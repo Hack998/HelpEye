@@ -18,7 +18,7 @@ class Lexer():
         self.lexer.add('CLOSE_PAREN',r'\)')
         # Comma
         self.lexer.add('COMMA', r'\,')
-        # Comma
+        # Point
         self.lexer.add('POINT', r'\.')
         # Semi Colon
         self.lexer.add('SEMI_COLON',r'\;')
@@ -33,17 +33,21 @@ class Lexer():
         # Funciones
         # Import
         self.lexer.add('IMPORT',r'IMPORT')
-        #enddo
+        # Enddo
         self.lexer.add('ENDDO',r'Enddo')
         # Call
         self.lexer.add('CALL',r'Call')
         # Inclination
         self.lexer.add('INCLI',r'Inclination')
+        # Object
+        self.lexer.add('OBJ',r'Object')
+        # Sounds
+        self.lexer.add('SOUND',r'Sound')
         # Increase
         self.lexer.add('INC',r'Inc')
         # Decrease
         self.lexer.add('DEC',r'Dec')
-        #dow
+        # Dow
         self.lexer.add('DOW',r'Dow')
         # Brightness
         self.lexer.add('BRIGHT',r'Brightness')
@@ -51,6 +55,8 @@ class Lexer():
         self.lexer.add('VIB',r'Vibration')
         # Move
         self.lexer.add('MOV',r'Move')
+        # Temperature
+        self.lexer.add('TEMP',r'Temperature')
         # Comment
         self.lexer.add('COMMENT', r'//')
         # Times

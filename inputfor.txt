@@ -1,0 +1,16 @@
+// Prueba for
+DECLARE x = 1;
+IMPORT /home/samuel/Escritorio/Compi/Prueba/gcc/importfor.txt
+
+// Principal
+Procedure Main()
+begin
+
+For 1 Times
+Call for;
+For 2 Times
+Inc(x,2);
+Fend;
+Fend;
+
+end;

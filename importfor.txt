@@ -1,0 +1,9 @@
+// import for 
+DECLARE y = 1;
+Procedure for ()
+begin
+For 2 Times
+Inclination(y);
+Inc(y,10);
+Fend;
+end;

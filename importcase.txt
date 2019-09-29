@@ -1,0 +1,12 @@
+// import case 
+DECLARE y = 1;
+Procedure case ()
+begin
+CASE
+WHEN y = 1
+THEN
+Inc(y,15);
+ELSE
+Inclination(y);
+END CASE;
+end;

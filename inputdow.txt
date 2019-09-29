@@ -1,0 +1,17 @@
+// Prueba dow
+DECLARE x;
+DECLARE f = 1;
+IMPORT /home/samuel/Escritorio/Compi/Prueba/gcc/importdow.txt
+
+// Principal
+Procedure Main()
+begin
+
+Dow(x,1,15,17)
+
+Inclination(x);
+Call dow;
+
+Enddo;
+
+end;

@@ -1,0 +1,24 @@
+// Prueba case
+DECLARE x = 1;
+IMPORT /home/samuel/Escritorio/Compi/Prueba/gcc/importcase.txt
+
+// Principal
+Procedure Main()
+begin
+
+CASE
+WHEN x = 1 THEN
+
+Inc(x,14);
+Call case;
+CASE
+WHEN x = 15 THEN
+Inclination (x);
+ELSE
+Inc(x,1);
+END CASE;
+
+ELSE
+Inclination(x);
+END CASE;
+end;

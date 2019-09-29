@@ -1,14 +1,17 @@
-// principal
-DECLARE x;
-DECLARE y;
-Procedure Main()
+// extraccion
+DECLARE hola;
+IMPORT /home/samuel/Escritorio/Compi/Prueba/gcc/data.txt
+
+// Principal
+Procedure Main ()
 begin
 
-Dow(x,1,1,2)
-Inc(1,1);
-Dow(y,1,1,3)
-Inc(2,2);
-Enddo;
-Enddo;
+Object(x);
+Move(y);
+Vibration(z);
+Inclination(c);
+Temperature(v);
+Brightness(b);
+Sound(n);
 
 end;
